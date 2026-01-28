@@ -1,0 +1,218 @@
+.profile-page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 32px 24px;
+}
+
+.profile-error {
+  text-align: center;
+  padding: 80px 20px;
+}
+
+.profile-error h2 {
+  color: var(--chrome);
+  margin-bottom: 24px;
+}
+
+.back-link {
+  color: var(--blood-bright);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.back-link:hover {
+  text-decoration: underline;
+}
+
+.profile-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 32px;
+  background: linear-gradient(180deg, var(--bg-elevated) 0%, var(--bg-card) 100%);
+  border: 1px solid var(--metal-dark);
+  border-radius: 8px;
+}
+
+.profile-avatar {
+  width: 100px;
+  height: 100px;
+  background: linear-gradient(180deg, var(--blood-dark) 0%, var(--void-deep) 100%);
+  border: 2px solid var(--blood);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 42px;
+  font-family: 'Cinzel', serif;
+  color: var(--silver);
+  flex-shrink: 0;
+}
+
+.profile-info {
+  flex: 1;
+}
+
+.profile-info h1 {
+  font-size: 28px;
+  margin-bottom: 4px;
+  background: linear-gradient(180deg, var(--silver) 0%, var(--chrome) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.profile-username {
+  color: var(--metal-light);
+  font-size: 15px;
+  margin-bottom: 12px;
+}
+
+.profile-bio {
+  color: var(--chrome);
+  font-size: 15px;
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+
+.profile-joined {
+  color: var(--metal-mid);
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.predictions-history {
+  margin-top: 32px;
+}
+
+.predictions-history h2 {
+  font-size: 20px;
+  margin-bottom: 20px;
+  color: var(--chrome);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.predictions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.prediction-item {
+  background: linear-gradient(180deg, var(--bg-elevated) 0%, var(--bg-card) 100%);
+  border: 1px solid var(--metal-dark);
+  border-radius: 6px;
+  padding: 16px 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 16px;
+  align-items: center;
+}
+
+.prediction-item.perfect {
+  border-color: var(--gold);
+  box-shadow: 0 0 10px rgba(212,175,55,0.2);
+}
+
+.prediction-item.correct {
+  border-color: var(--success);
+}
+
+.prediction-item.wrong {
+  border-color: var(--blood-dark);
+}
+
+.prediction-teams {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.prediction-teams .winner {
+  color: var(--gold);
+}
+
+.prediction-teams .vs {
+  color: var(--metal-mid);
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.prediction-details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+}
+
+.prediction-details .predicted {
+  color: var(--chrome);
+}
+
+.prediction-details .actual {
+  color: var(--metal-light);
+}
+
+.prediction-result {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.prediction-result .result-badge {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 4px 8px;
+  border-radius: 3px;
+  background: var(--metal-dark);
+  color: var(--metal-light);
+}
+
+.prediction-item.perfect .result-badge {
+  background: var(--gold-dark);
+  color: var(--gold-bright);
+}
+
+.prediction-item.correct .result-badge {
+  background: var(--success);
+  color: var(--success-bright);
+}
+
+.prediction-item.wrong .result-badge {
+  background: var(--blood-dark);
+  color: var(--blood-bright);
+}
+
+.prediction-result .points {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--gold);
+}
+
+@media (max-width: 600px) {
+  .profile-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 24px;
+  }
+
+  .prediction-item {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .prediction-result {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "Bash(ls \"C:\\\\Users\\\\skate\\\\predictions\\\\lol-predictions\\\\server\\\\src\\\\types\"\" 2>/dev/null || dir \"C:Usersskatepredictionslol-predictionsserversrctypes\"\" /B)"
+    ]
+  }
+}

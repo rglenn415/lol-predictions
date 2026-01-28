@@ -1,0 +1,141 @@
+.day-selector {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.day-arrow {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, var(--bg-elevated) 0%, var(--bg-card) 100%);
+  border: 1px solid var(--metal-dark);
+  border-radius: 4px;
+  color: var(--chrome);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.day-arrow:hover:not(:disabled) {
+  background: linear-gradient(180deg, var(--metal-dark) 0%, var(--bg-elevated) 100%);
+  border-color: var(--metal-mid);
+  color: var(--silver);
+}
+
+.day-arrow:disabled {
+  opacity: 0.25;
+  cursor: not-allowed;
+}
+
+.day-tabs {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  flex: 1;
+  padding: 2px 0;
+}
+
+.day-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.day-tab {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 8px 14px;
+  background: linear-gradient(180deg, var(--bg-elevated) 0%, var(--bg-card) 100%);
+  border: 1px solid var(--metal-dark);
+  border-radius: 4px;
+  color: var(--metal-light);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.day-tab::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--metal-mid), transparent);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.day-tab:hover {
+  background: linear-gradient(180deg, var(--metal-dark) 0%, var(--bg-elevated) 100%);
+  border-color: var(--metal-mid);
+  color: var(--chrome);
+}
+
+.day-tab:hover::before {
+  opacity: 1;
+}
+
+.day-tab.active {
+  background: linear-gradient(180deg, var(--blood-dark) 0%, var(--bg-card) 100%);
+  border-color: var(--blood);
+  color: var(--silver);
+  box-shadow: 0 0 15px rgba(139, 0, 0, 0.25);
+}
+
+.day-tab.active::before {
+  opacity: 1;
+  background: linear-gradient(90deg, transparent, var(--blood-bright), transparent);
+}
+
+.day-label {
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+.day-count {
+  font-size: 11px;
+  color: var(--metal-mid);
+  letter-spacing: 0.04em;
+}
+
+.day-tab.active .day-count {
+  color: var(--chrome);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .day-selector {
+    gap: 4px;
+  }
+
+  .day-arrow {
+    width: 32px;
+    height: 32px;
+    font-size: 10px;
+  }
+
+  .day-tab {
+    padding: 6px 10px;
+  }
+
+  .day-label {
+    font-size: 11px;
+  }
+
+  .day-count {
+    font-size: 10px;
+  }
+}

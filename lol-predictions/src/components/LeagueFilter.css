@@ -1,0 +1,135 @@
+.league-filter {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--metal-dark);
+  position: relative;
+}
+
+/* Subtle glow line */
+.league-filter::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 150px;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    var(--blood) 50%,
+    transparent 100%
+  );
+}
+
+.league-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(180deg, var(--bg-elevated) 0%, var(--bg-card) 100%);
+  border: 1px solid var(--metal-dark);
+  color: var(--metal-light);
+  padding: 10px 16px;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Top highlight */
+.league-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(200,200,220,0.2) 50%,
+    transparent 100%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* Hover: unselected only */
+.league-btn:not(.active):hover {
+  background: linear-gradient(180deg, var(--metal-dark) 0%, var(--bg-elevated) 100%);
+  border-color: var(--metal-mid);
+  color: var(--chrome);
+  transform: translateY(-1px);
+}
+
+.league-btn:not(.active):hover::before {
+  opacity: 1;
+}
+
+/* Active/Selected state */
+.league-btn.active {
+  background: linear-gradient(180deg, var(--blood) 0%, var(--blood-dark) 100%);
+  border-color: var(--blood-bright);
+  color: white;
+  box-shadow: 0 0 20px rgba(220,20,60,0.4), inset 0 1px 0 rgba(255,255,255,0.15);
+}
+
+.league-btn.active::before {
+  opacity: 1;
+  background: linear-gradient(90deg, transparent 0%, var(--crimson-glow) 50%, transparent 100%);
+}
+
+/* Active + Hover: brighter, stays white */
+.league-btn.active:hover {
+  background: linear-gradient(180deg, var(--blood-bright) 0%, var(--blood) 100%);
+  border-color: var(--crimson-glow);
+  color: white;
+  box-shadow: 0 0 25px rgba(220,20,60,0.6), inset 0 1px 0 rgba(255,255,255,0.2);
+  transform: translateY(-1px);
+}
+
+.league-btn img {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 3px rgba(0,0,0,0.4));
+  transition: transform 0.3s ease;
+}
+
+.league-btn:hover img {
+  transform: scale(1.1);
+}
+
+.league-btn.minor-league {
+  display: none;
+}
+
+.league-filter.show-all .league-btn.minor-league {
+  display: flex;
+}
+
+.toggle-leagues-btn {
+  background: transparent;
+  border: 1px dashed var(--metal-dark);
+  color: var(--metal-mid);
+  padding: 10px 16px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.toggle-leagues-btn:hover {
+  border-color: var(--metal-mid);
+  color: var(--chrome);
+  background: rgba(255,255,255,0.02);
+}

@@ -1,0 +1,490 @@
+.match-card {
+  background: linear-gradient(180deg, var(--bg-elevated) 0%, var(--bg-card) 100%);
+  border-radius: 6px;
+  padding: 20px;
+  border: 1px solid var(--metal-dark);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle inner glow */
+.match-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    var(--metal-mid) 50%,
+    transparent 100%
+  );
+}
+
+.match-card:hover {
+  border-color: var(--metal-mid);
+  box-shadow:
+    0 4px 30px rgba(0,0,0,0.5),
+    inset 0 1px 0 rgba(255,255,255,0.05);
+}
+
+.match-card.correct {
+  border-color: var(--success);
+  background: linear-gradient(180deg,
+    var(--bg-elevated) 0%,
+    rgba(42, 138, 74, 0.15) 100%
+  );
+}
+
+.match-card.correct::before {
+  background: linear-gradient(90deg,
+    transparent 0%,
+    var(--success-bright) 50%,
+    transparent 100%
+  );
+}
+
+.match-card.perfect {
+  border-color: var(--gold);
+  background: linear-gradient(180deg,
+    var(--bg-elevated) 0%,
+    rgba(212, 175, 55, 0.1) 100%
+  );
+  box-shadow: 0 0 30px rgba(212, 175, 55, 0.15);
+}
+
+.match-card.perfect::before {
+  background: linear-gradient(90deg,
+    transparent 0%,
+    var(--gold-bright) 50%,
+    transparent 100%
+  );
+}
+
+.match-card.wrong {
+  border-color: var(--blood);
+  background: linear-gradient(180deg,
+    var(--bg-elevated) 0%,
+    rgba(139, 0, 0, 0.15) 100%
+  );
+}
+
+.match-card.wrong::before {
+  background: linear-gradient(90deg,
+    transparent 0%,
+    var(--blood-bright) 50%,
+    transparent 100%
+  );
+}
+
+.match-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.league-logo {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+}
+
+.league-name {
+  color: var(--metal-light);
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.live-badge {
+  background: linear-gradient(180deg, var(--blood-bright) 0%, var(--blood) 100%);
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  animation: livePulse 2s ease-in-out infinite;
+  box-shadow: 0 0 15px rgba(220, 20, 60, 0.5);
+}
+
+@keyframes livePulse {
+  0%, 100% {
+    opacity: 1;
+    box-shadow: 0 0 15px rgba(220, 20, 60, 0.5);
+  }
+  50% {
+    opacity: 0.8;
+    box-shadow: 0 0 25px rgba(220, 20, 60, 0.8);
+  }
+}
+
+.completed-badge {
+  background: linear-gradient(180deg, var(--metal-mid) 0%, var(--metal-dark) 100%);
+  color: var(--silver);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.match-time {
+  margin-left: auto;
+  color: var(--metal-light);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.match-format {
+  text-align: center;
+  color: var(--metal-mid);
+  font-size: 12px;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+
+.teams-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.team {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: linear-gradient(180deg, var(--bg-card) 0%, var(--bg-dark) 100%);
+  border: 2px solid var(--metal-dark);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Metallic sheen on hover */
+.team::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(200,200,220,0.05) 50%,
+    transparent 100%
+  );
+  transition: left 0.5s ease;
+}
+
+.team.clickable {
+  cursor: pointer;
+}
+
+/* Hover: unselected teams only */
+.team.clickable:not(.selected):hover {
+  background: linear-gradient(180deg, var(--bg-elevated) 0%, var(--bg-card) 100%);
+  border-color: var(--metal-mid);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+}
+
+.team.clickable:not(.selected):hover::before {
+  left: 100%;
+}
+
+.team:not(.clickable) {
+  cursor: default;
+}
+
+/* Selected team: red */
+.team.selected {
+  border-color: var(--blood-bright);
+  background: linear-gradient(180deg, var(--blood) 0%, var(--blood-dark) 100%);
+  box-shadow: 0 0 25px rgba(220,20,60,0.4), inset 0 1px 0 rgba(255,255,255,0.15);
+}
+
+/* Selected + Hover: brighter red */
+.team.selected.clickable:hover {
+  background: linear-gradient(180deg, var(--blood-bright) 0%, var(--blood) 100%);
+  border-color: var(--crimson-glow);
+  transform: translateY(-2px);
+  box-shadow: 0 0 30px rgba(220,20,60,0.6), 0 8px 25px rgba(0,0,0,0.4);
+}
+
+.team.winner {
+  border-color: var(--success-bright);
+  box-shadow: 0 0 20px rgba(74, 222, 128, 0.2);
+}
+
+.team-logo {
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+  margin-bottom: 12px;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
+  transition: transform 0.3s ease;
+}
+
+.team:hover .team-logo {
+  transform: scale(1.05);
+}
+
+.team-code {
+  font-family: 'Cinzel', serif;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--silver);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+}
+
+.team-name {
+  font-size: 12px;
+  color: var(--metal-light);
+  text-align: center;
+  margin-top: 4px;
+}
+
+.team-score {
+  font-family: 'Cinzel', serif;
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--gold);
+  margin-top: 10px;
+  text-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+}
+
+.vs {
+  font-family: 'Cinzel', serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--metal-dark);
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.score-select {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--metal-dark);
+  text-align: center;
+  position: relative;
+}
+
+.score-select::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--blood), transparent);
+}
+
+.score-select p {
+  color: var(--chrome);
+  margin-bottom: 14px;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.score-options {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.score-btn {
+  background: linear-gradient(180deg, var(--bg-card) 0%, var(--bg-dark) 100%);
+  color: var(--metal-light);
+  border: 2px solid var(--metal-dark);
+  padding: 12px 28px;
+  border-radius: 6px;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  position: relative;
+  overflow: hidden;
+}
+
+.score-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.score-btn.saving {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+/* Hover: unselected buttons only */
+.score-btn:not(:disabled):not(.selected):hover {
+  background: linear-gradient(180deg, var(--bg-elevated) 0%, var(--bg-card) 100%);
+  border-color: var(--metal-mid);
+  color: var(--silver);
+}
+
+/* Selected: red background, white text */
+.score-btn.selected {
+  background: linear-gradient(180deg, var(--blood) 0%, var(--blood-dark) 100%);
+  border-color: var(--blood-bright);
+  color: white;
+  box-shadow: 0 0 20px rgba(220,20,60,0.5), inset 0 1px 0 rgba(255,255,255,0.15);
+}
+
+/* Selected + Hover: brighter red, stays white */
+.score-btn.selected:hover {
+  background: linear-gradient(180deg, var(--blood-bright) 0%, var(--blood) 100%);
+  border-color: var(--crimson-glow);
+  color: white;
+  box-shadow: 0 0 25px rgba(220,20,60,0.7), inset 0 1px 0 rgba(255,255,255,0.2);
+}
+
+/* Selected while disabled */
+.score-btn.selected:disabled {
+  opacity: 1;
+  cursor: default;
+}
+
+/* Selected during save */
+.score-btn.selected.saving {
+  opacity: 0.85;
+}
+
+/* Red accent line on selected */
+.score-btn.selected::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--crimson-glow), transparent);
+}
+
+.prediction-display {
+  margin-top: 20px;
+  padding: 16px;
+  background: linear-gradient(180deg, var(--bg-card) 0%, var(--bg-dark) 100%);
+  border-radius: 6px;
+  text-align: center;
+  border: 1px solid var(--metal-dark);
+}
+
+.prediction-label {
+  color: var(--metal-mid);
+  font-size: 11px;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+
+.prediction-value {
+  font-family: 'Cinzel', serif;
+  color: var(--chrome);
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.result-badge {
+  margin-top: 10px;
+  padding: 6px 16px;
+  border-radius: 3px;
+  font-size: 12px;
+  font-weight: 700;
+  display: inline-block;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.match-card.perfect .result-badge {
+  background: linear-gradient(180deg, var(--gold-bright) 0%, var(--gold) 100%);
+  color: var(--bg-dark);
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+}
+
+.match-card.correct .result-badge {
+  background: linear-gradient(180deg, var(--success-bright) 0%, var(--success) 100%);
+  color: var(--bg-dark);
+}
+
+.match-card.wrong .result-badge {
+  background: linear-gradient(180deg, var(--blood-bright) 0%, var(--blood) 100%);
+  color: white;
+  box-shadow: 0 0 15px rgba(220, 20, 60, 0.3);
+}
+
+.result-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.points-earned {
+  font-family: 'Cinzel', serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--metal-mid);
+  padding: 4px 12px;
+  border-radius: 4px;
+  background: var(--bg-dark);
+  border: 1px solid var(--metal-dark);
+}
+
+.points-earned.has-points {
+  color: var(--gold-bright);
+  border-color: var(--gold);
+  background: linear-gradient(180deg, rgba(212,175,55,0.15) 0%, rgba(139,117,0,0.1) 100%);
+  box-shadow: 0 0 15px rgba(212,175,55,0.2);
+}
+
+/* Mobile Responsive */
+@media (max-width: 600px) {
+  .match-card {
+    padding: 16px;
+  }
+
+  .team {
+    padding: 14px 10px;
+  }
+
+  .team-logo {
+    width: 56px;
+    height: 56px;
+  }
+
+  .team-code {
+    font-size: 20px;
+  }
+
+  .team-score {
+    font-size: 28px;
+  }
+
+  .vs {
+    font-size: 16px;
+  }
+}
