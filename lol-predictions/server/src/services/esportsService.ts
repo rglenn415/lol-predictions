@@ -66,24 +66,64 @@ function updateCacheMeta(key: string, error?: string): void {
   }
 }
 
+const TWO_WEEKS_MS = 14 * 24 * 60 * 60 * 1000;
+const MAX_FORWARD_PAGES = 5;
+
 export async function refreshScheduleCache(): Promise<number> {
   try {
-    const data = await fetchExternalApi<ScheduleApiResponse>('getSchedule');
-    const events = data.schedule.events;
+    const allEvents: ScheduleEvent[] = [];
+    const twoWeeksFromNow = Date.now() + TWO_WEEKS_MS;
+    let pageToken: string | undefined;
+    let pagesRead = 0;
+
+    // Fetch the current page, then follow "newer" pages until we cover 2 weeks ahead
+    while (pagesRead < MAX_FORWARD_PAGES + 1) {
+      const params: Record<string, string> = {};
+      if (pageToken) {
+        params.pageToken = pageToken;
+      }
+
+      const data = await fetchExternalApi<ScheduleApiResponse>('getSchedule', params);
+      const events = data.schedule.events;
+      allEvents.push(...events);
+      pagesRead++;
+
+      // Stop if there's no next page
+      const newerToken = data.schedule.pages?.newer;
+      if (!newerToken) break;
+
+      // Stop if the latest event on this page already exceeds 2 weeks out
+      if (events.length > 0) {
+        const latestTime = Math.max(...events.map(e => new Date(e.startTime).getTime()));
+        if (latestTime > twoWeeksFromNow) break;
+      }
+
+      pageToken = newerToken;
+    }
 
     const upsert = db.prepare(`
       INSERT OR REPLACE INTO esports_events (id, start_time, state, league_slug, match_id, event_json)
       VALUES (?, ?, ?, ?, ?, ?)
     `);
 
+    // Remove stale events that share a match_id with an incoming event
+    // but have a different event id (API reassigned event IDs)
+    const cleanupDuplicateMatch = db.prepare(`
+      DELETE FROM esports_events WHERE match_id = ? AND id != ?
+    `);
+
     const runTransaction = db.transaction(() => {
-      for (const event of events) {
+      for (const event of allEvents) {
+        const matchId = event.match?.id || null;
+        if (matchId) {
+          cleanupDuplicateMatch.run(matchId, event.id);
+        }
         upsert.run(
           event.id,
           event.startTime,
           event.state,
           event.league.slug,
-          event.match?.id || null,
+          matchId,
           JSON.stringify(event)
         );
       }
@@ -91,8 +131,8 @@ export async function refreshScheduleCache(): Promise<number> {
 
     runTransaction();
     updateCacheMeta('schedule');
-    console.log(`Schedule cached: ${events.length} events`);
-    return events.length;
+    console.log(`Schedule cached: ${allEvents.length} events (${pagesRead} page${pagesRead > 1 ? 's' : ''})`);
+    return allEvents.length;
   } catch (error) {
     const msg = error instanceof Error ? error.message : String(error);
     updateCacheMeta('schedule', msg);
@@ -130,9 +170,24 @@ export async function refreshLeaguesCache(): Promise<number> {
 }
 
 export function getCachedSchedule(): ScheduleEvent[] {
+  // Return events from the past 7 days through 14 days ahead,
+  // deduplicated by match_id (keep the most recently inserted row per match).
+  const now = new Date();
+  const pastCutoff = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000).toISOString();
+  const futureCutoff = new Date(now.getTime() + TWO_WEEKS_MS).toISOString();
+
   const rows = db.prepare(`
-    SELECT event_json FROM esports_events ORDER BY start_time ASC
-  `).all() as { event_json: string }[];
+    SELECT event_json FROM esports_events e
+    WHERE e.start_time >= ? AND e.start_time <= ?
+      AND (
+        e.match_id IS NULL
+        OR e.rowid = (
+          SELECT MAX(e2.rowid) FROM esports_events e2
+          WHERE e2.match_id = e.match_id
+        )
+      )
+    ORDER BY start_time ASC
+  `).all(pastCutoff, futureCutoff) as { event_json: string }[];
 
   return rows.map(r => JSON.parse(r.event_json) as ScheduleEvent);
 }

@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import './DaySelector.css';
 
 interface DaySelectorProps {
@@ -6,6 +7,8 @@ interface DaySelectorProps {
   onSelectDay: (day: string) => void;
   matchCounts: Record<string, number>;
 }
+
+const VISIBLE_COUNT = 5;
 
 function formatDayLabel(dateStr: string): string {
   const date = new Date(dateStr + 'T00:00:00');
@@ -34,6 +37,17 @@ export function DaySelector({ days, selectedDay, onSelectDay, matchCounts }: Day
   const hasPrev = currentIndex > 0;
   const hasNext = currentIndex < days.length - 1;
 
+  const visibleDays = useMemo(() => {
+    const half = Math.floor(VISIBLE_COUNT / 2);
+    let start = Math.max(0, currentIndex - half);
+    let end = start + VISIBLE_COUNT;
+    if (end > days.length) {
+      end = days.length;
+      start = Math.max(0, end - VISIBLE_COUNT);
+    }
+    return days.slice(start, end);
+  }, [days, currentIndex]);
+
   const goTo = (offset: number) => {
     const next = currentIndex + offset;
     if (next >= 0 && next < days.length) {
@@ -55,7 +69,7 @@ export function DaySelector({ days, selectedDay, onSelectDay, matchCounts }: Day
       </button>
 
       <div className="day-tabs">
-        {days.map(day => (
+        {visibleDays.map(day => (
           <button
             key={day}
             className={`day-tab ${day === selectedDay ? 'active' : ''}`}

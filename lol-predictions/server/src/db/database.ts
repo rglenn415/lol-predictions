@@ -38,6 +38,25 @@ function runMigrations(): void {
     // Backfill points for existing users
     recalculateAllUserPoints();
   }
+
+  // Clean up duplicate events that share a match_id (keep the most recent row)
+  cleanupDuplicateEvents();
+}
+
+function cleanupDuplicateEvents(): void {
+  const deleted = db.prepare(`
+    DELETE FROM esports_events
+    WHERE match_id IS NOT NULL
+      AND rowid NOT IN (
+        SELECT MAX(rowid) FROM esports_events
+        WHERE match_id IS NOT NULL
+        GROUP BY match_id
+      )
+  `).run();
+
+  if (deleted.changes > 0) {
+    console.log(`Cleaned up ${deleted.changes} duplicate event(s) by match_id`);
+  }
 }
 
 // Recalculate and update total_points for all users
